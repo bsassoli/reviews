@@ -8,4 +8,4 @@ selenium==3.141.0
 streamlit==1.8.1
 streamlit_option_menu==0.3.2
 webdriver_manager==3.4.2
-wordcloud==1.8.1.post9+g35ce9b7
+wordcloud<=1.8.1.post9+g35ce9b7
