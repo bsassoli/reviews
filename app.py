@@ -168,7 +168,9 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
                 "Mesi",
                 int(venues_df.Data.dt.month.min()),
                 int(venues_df.Data.dt.month.max()),
-                int((venues_df.Data.dt.month.min()), int(venues_df.Data.dt.month.max()))
+                (
+                    int(venues_df.Data.dt.month.min()), 
+                    int(venues_df.Data.dt.month.max()))
             )
             start_date = pd.to_datetime(str(month[0]) + str(year[0]), format="%m%Y")
             end_date = pd.to_datetime(str(month[1]) + str(year[1]), format="%m%Y")
