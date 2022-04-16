@@ -150,8 +150,8 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
         if date_choice == "Anno":
             year = st.slider(
                     "ANNO",
-                    venues_df.Data.dt.year.min(),
-                    venues_df.Data.dt.year.max(),
+                    int(venues_df.Data.dt.year.min()),
+                    int(venues_df.Data.dt.year.max()),
                     (int(venues_df.Data.dt.year.min()), int(venues_df.Data.dt.year.max()))
                 )
             start_date = start_date = pd.to_datetime(str(year[0]), format="%Y")
