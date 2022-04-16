@@ -149,7 +149,7 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
 
         if date_choice == "Anno":
             year = st.slider(
-                    "ANNO",
+                    "Anno",
                     int(venues_df.Data.dt.year.min()),
                     int(venues_df.Data.dt.year.max()),
                     (int(venues_df.Data.dt.year.min()), int(venues_df.Data.dt.year.max()))
@@ -160,15 +160,15 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
         elif date_choice == "Mese":
             year = st.slider(
                 "Anni",
-                venues_df.Data.dt.year.min(),
-                venues_df.Data.dt.year.max(),
-                (venues_df.Data.dt.year.min(), venues_df.Data.dt.year.max())
+                int(venues_df.Data.dt.year.min()),
+                int(venues_df.Data.dt.year.max()),
+                (int(venues_df.Data.dt.year.min()), int(venues_df.Data.dt.year.max()))
             )
             month = st.slider(
                 "Mesi",
-                venues_df.Data.dt.month.min(),
-                venues_df.Data.dt.month.max(),
-                (venues_df.Data.dt.month.min(), venues_df.Data.dt.month.max())
+                int(venues_df.Data.dt.month.min()),
+                int(venues_df.Data.dt.month.max()),
+                int((venues_df.Data.dt.month.min()), int(venues_df.Data.dt.month.max()))
             )
             start_date = pd.to_datetime(str(month[0]) + str(year[0]), format="%m%Y")
             end_date = pd.to_datetime(str(month[1]) + str(year[1]), format="%m%Y")
