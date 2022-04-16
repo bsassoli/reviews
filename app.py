@@ -180,7 +180,7 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
             with cols[0]:
                 start_date = st.date_input(
                     "Inizio", 
-                    df.Data.min(),
+                    venues_df.Data.min(),
                     )
             with cols[1]:
                 end_date = st.date_input("Fine")
