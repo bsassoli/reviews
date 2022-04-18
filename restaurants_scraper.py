@@ -1,11 +1,24 @@
-import sys
 import csv
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import sys
 import time
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.wait import WebDriverWait
+
+# set options for selenium, maybe not all necessary
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-features=NetworkService")
+options.add_argument("--window-size=1920x1080")
+options.add_argument("--disable-features=VizDisplayCompositor")
+
 # default path to file to store data
-path_to_file = "/Users/gius/Desktop/reviews.csv"
+# path_to_file = "/Users/gius/Desktop/reviews.csv"
+path_to_file = "data/reviews.csv"
 
 # default number of scraped pages
 num_page = 10
@@ -20,10 +33,12 @@ if (len(sys.argv) == 4):
     url = sys.argv[3]
 
 # Import the webdriver
-driver = webdriver.Chrome(ChromeDriverManager().install())
+# driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
 driver.get(url)
 time.sleep(2)
 cookies = driver.find_element_by_id("onetrust-accept-btn-handler")
+# cookies = WebDriverWait(driver, 10).until(lambda x: x.find_element_by_id("onetrust-accept-btn-handler"))
 cookies.click()
 
 # Open the file to save the review
@@ -32,8 +47,8 @@ csvWriter = csv.writer(csvFile)
 
 # change the value inside the range to save more or less reviews
 for i in range(0, num_page):
-    
-    # expand the review 
+
+    # expand the review
     time.sleep(2)
     button = driver.find_element_by_xpath("//span[@class='taLnk ulBlueLinks']")
     driver.execute_script("arguments[0].click();", button)
@@ -48,7 +63,7 @@ for i in range(0, num_page):
         rating = container[j].find_element_by_xpath(".//span[contains(@class, 'ui_bubble_rating bubble_')]").get_attribute("class").split("_")[3]
         review = container[j].find_element_by_xpath(".//p[@class='partial_entry']").text.replace("\n", " ")
 
-        csvWriter.writerow([date, rating, title, review]) 
+        csvWriter.writerow([date, rating, title, review])
 
     # change the page
     driver.find_element_by_xpath('.//a[@class="nav next ui_button primary"]').click()

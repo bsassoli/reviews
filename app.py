@@ -35,7 +35,7 @@ df = get_data("data/all.csv")
 # Constants
 # ==============================================================
 VENUES = {
-    "Tadino": "tadino",  
+    "Tadino": "tadino",
     "Gae Aulenti": "gaeaulenti",
     "Concordia": "concordia",
     "La Foppa": "lafoppa",
@@ -63,13 +63,13 @@ with st.sidebar:
         "icon": {"color": "black", "font-size": "25px"},
         "nav-link": {"font-size": "16px", "text-align": "left", "margin": "0px", "--hover-color": "#F0F2F6"},
         "nav-link-selected": {"background-color": "#FF4B4B"},
-    }    
+    }
     )
 
 
 placeholder = st.container()
 if choose=="Trend":
-    with st.sidebar:        
+    with st.sidebar:
         # Select display period for trend metrics
         trends_choice = st.radio("Seleziona periodo trend: ", options=["Ultima settimana", "Ultimo mese", "Ultimo anno"])
         if trends_choice == "Ultimo anno":
@@ -89,13 +89,13 @@ if choose=="Trend":
         with placeholder:
             total_reviews = len(df)
             new_reviews = len(trend_df)
-            delta_reviews = len(trend_df) - len(start_trend_df)        
+            delta_reviews = len(trend_df) - len(start_trend_df)
             delta_no_reviews = new_reviews - len(trend_df)
             pos_prev = start_trend_df[start_trend_df["Etichetta"] == "pos"]
             pos_period = trend_df[trend_df["Etichetta"] == "pos"]
             neg_prev = start_trend_df[start_trend_df["Etichetta"] == "neg"]
-            neg_period = trend_df[trend_df["Etichetta"] == "neg"]        
-    
+            neg_period = trend_df[trend_df["Etichetta"] == "neg"]
+
             col1, col2, col3 = st.columns(3)
 
             col1.metric("Totale recensioni", total_reviews)
@@ -128,7 +128,7 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
         all_venues_options = list(VENUES.keys())
         all_venues_options.append("Tutti")
         venues_choice = st.multiselect("Seleziona locali:",
-                                        all_venues_options, 
+                                        all_venues_options,
                                         VENUES.keys()
         )
 
@@ -172,12 +172,12 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
             )
             start_date = pd.to_datetime(str(month[0]) + str(year[0]), format="%m%Y")
             end_date = pd.to_datetime(str(month[1]) + str(year[1]), format="%m%Y")
-            
+
         elif date_choice == "Intervallo di date":
             cols = st.columns(2)
             with cols[0]:
                 start_date = st.date_input(
-                    "Inizio", 
+                    "Inizio",
                     df.Data.min(),
                     )
             with cols[1]:
@@ -246,15 +246,9 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
                 search_words = st.text_input("Ricerca", max_chars=30)
                 search_words = search_words.lower()
                 no_reviews_to_display = st.number_input(
-                    "Numero recensioni", max_value=len(selection), 
+                    "Numero recensioni", max_value=len(selection),
                     value=5
                     )
-            review = selection[selection["Testo"].str.contains(search_words)]            
+            review = selection[selection["Testo"].str.contains(search_words)]
             placeholder.table(review[["Data", "Titolo", "Testo"]].head(
                 no_reviews_to_display).style.hide_index())
-
-
-
-
-
-
