@@ -36,9 +36,9 @@ if (len(sys.argv) == 4):
 # driver = webdriver.Chrome(ChromeDriverManager().install())
 driver = webdriver.Chrome(options=options, service_log_path='selenium.log')
 driver.get(url)
-# time.sleep(2)
-# cookies = driver.find_element_by_id("onetrust-accept-btn-handler")
-cookies = WebDriverWait(driver, 10).until(lambda x: x.find_element_by_id("onetrust-accept-btn-handler"))
+time.sleep(2)
+cookies = driver.find_element_by_id("onetrust-accept-btn-handler")
+# cookies = WebDriverWait(driver, 10).until(lambda x: x.find_element_by_id("onetrust-accept-btn-handler"))
 cookies.click()
 
 # Open the file to save the review
