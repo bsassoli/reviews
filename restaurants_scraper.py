@@ -1,8 +1,14 @@
-import sys
 import csv
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import sys
 import time
+
+# selenium 4
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
 
 # default path to file to store data
 path_to_file = "/Users/gius/Desktop/reviews.csv"
@@ -20,7 +26,7 @@ if (len(sys.argv) == 4):
     url = sys.argv[3]
 
 # Import the webdriver
-driver = webdriver.Chrome(ChromeDriverManager().install())
+# driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.get(url)
 time.sleep(2)
 cookies = driver.find_element_by_id("onetrust-accept-btn-handler")
