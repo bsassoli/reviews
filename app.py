@@ -1,3 +1,4 @@
+from turtle import onclick
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -8,7 +9,9 @@ from streamlit_option_menu import option_menu
 import streamlit.components.v1 as html
 from datetime import datetime, timedelta
 from PIL import Image
-from nltk.corpus import stopwords
+import nltk
+nltk.download('stopwords')
+# from nltk.corpus import stopwords
 
 # ==============================================================
 # Set overall visualization params
@@ -66,9 +69,41 @@ with st.sidebar:
     }    
     )
 
+if "venues_choice" not in st.session_state:
+    st.session_state.venues_choice = VENUES.keys()
+
+if "all_venues_selected" not in st.session_state:
+    st.session_state.all_venues_selected = True
+    
+
+def reset_checkbox():
+    if st.session_state.all_venues_selected:
+        st.session_state.all_venues_selected = False
+
+
+def check_change():
+    # this runs BEFORE the rest of the script when a change is detected
+    # from your checkbox to set selectbox
+    if st.session_state.all_venues_selected:
+        st.session_state.venues_choice_container = VENUES.keys()
+    else:
+        st.session_state.venues_choice_container = VENUES.keys()
+    return
+
+
+def multi_change():
+    # this runs BEFORE the rest of the script when a change is detected
+    # from your selectbox to set checkbox
+    if len(st.session_state.venues_choice) == len(VENUES.keys()):
+        st.session_state.all_venues_selected = True
+    else:
+        st.session_state.all_venues_selected = False
+    return
+
+
 
 placeholder = st.container()
-if choose=="Trend":
+if choose=="Trend":    
     with st.sidebar:        
         # Select display period for trend metrics
         trends_choice = st.radio("Seleziona periodo trend: ", options=["Ultima settimana", "Ultimo mese", "Ultimo anno"])
@@ -122,20 +157,45 @@ if choose=="Trend":
                         f"{delta_neg * 100:.1f} %", delta_color="inverse")
 
 
+
 if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
     with st.sidebar:
+        
     # Select venues
-        all_venues_options = list(VENUES.keys())
-        all_venues_options.append("Tutti")
-        venues_choice = st.multiselect("Seleziona locali:",
-                                        all_venues_options, 
-                                        VENUES.keys()
-        )
+        venues_choice_container = st.container()
+        all_venues_selected = st.checkbox("Seleziona tutti", key="all_venues_selected")
 
-        if "Tutti" in venues_choice:
+        if all_venues_selected:
+            venues_choice = venues_choice_container.multiselect("Seleziona uno o più locali:",
+                                                                VENUES.keys(), VENUES.keys(), on_change=check_change)
+        else:
+            venues_choice = venues_choice_container.multiselect("Seleziona uno o più locali:",
+                                                                VENUES.keys(), VENUES.keys(),on_change=multi_change)
+                                                    
+        venues_selection = [VENUES[venue] for venue in venues_choice]
+            
+        """ all_venues_options = list(VENUES.keys())
+        all_venues_options.append("Tutti")
+        venues_choice_container = st.container()
+        all_venues_selected = st.checkbox("Tutte", key="all_venues_selected")
+        st.write(st.session_state["all_venues_selected"])
+        if all_venues_selected:
+            venues_choice = venues_choice_container.multiselect("Seleziona locali:",
+                                            VENUES.keys(),
+                                            VENUES.keys(),                                            
+                                            key="venues_choice",
+                                            on_change = reset_checkbox
+                                            )
             venues_selection = VENUES.values()
         else:
+            venues_choice = venues_choice_container.multiselect("Seleziona locali:",
+                                            VENUES.keys(),
+                                            key="venues_choice",
+                                            )
             venues_selection = [VENUES[venue] for venue in venues_choice]
+ """
+        if not venues_selection:
+            st.error("Seleziona almeno un locale.")
 
         # Filter data by selected venues
         venues_mask = df.Locale.isin(venues_selection)
@@ -192,6 +252,8 @@ if choose in ["Dettaglio", "Wordcloud", "Recensioni"]:
     selection = df[mask]
     with placeholder:
         if choose=="Dettaglio":
+            if not venues_selection:
+                placeholder.error("Seleziona almeno un locale.")
             col1, col2 = st.columns((1, 1))
             with col1:
             # Plot overall rating distribution
