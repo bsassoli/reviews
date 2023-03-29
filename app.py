@@ -25,7 +25,7 @@ st.set_page_config(layout="wide")
 # ==============================================================
 # Retrieve and cache data
 # ==============================================================
-@st.cache
+@st.cache_data
 def get_data(path_to_venue_data):
     df = pd.read_csv(path_to_venue_data, parse_dates=["Data"], date_parser=parse)
     return df

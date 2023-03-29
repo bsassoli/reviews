@@ -1,9 +1,7 @@
 # Start with loading all necessary libraries
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-# import spacy
 import pandas as pd
-from os import path
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
